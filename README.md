@@ -87,5 +87,95 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-  
+THIS IS MY FULL CODE  
+
+MAINACTIVTY:::
+
+public class MainActivity extends AppCompatActivity {
+
+    public static String api = "https://jsonplaceholder.typicode.com";
+
+    List<Post> alluserlist;
+
+    RecyclerView rcvMain;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        rcvMain = findViewById(R.id.rcvmain);
+        rcvMain.setLayoutManager(new LinearLayoutManager(this));
+
+
+        Retrofiteinctentce.getIncentce().jsonplaceholderapi.getdata().enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                alluserlist = response.body();
+                rcvMain.setAdapter(new Useradpter(MainActivity.this, alluserlist));
+                
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+
+
+ADPTER::::
+
+package com.example.apicalling;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+public class Useradpter extends RecyclerView.Adapter<Useradpter.userholder> {
+
+    MainActivity mainActivity;
+    List<Post> alluserlist;
+
+    public Useradpter( MainActivity mainActivity,List<Post> alluserlist) {
+        this.mainActivity = mainActivity;
+        this.alluserlist = alluserlist;
+    }
+
+
+    @NonNull
+    @Override
+    public Useradpter.userholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new userholder(LayoutInflater.from(mainActivity).inflate(R.layout.item_user, parent, false));
+
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull Useradpter.userholder holder, int position) {
+        holder.itemtext.setText(alluserlist.get(position).getBody());
+    }
+
+    @Override
+    public int getItemCount() {
+        return alluserlist.size();
+    }
+
+    class userholder extends RecyclerView.ViewHolder {
+        TextView itemtext;
+
+        public userholder(@NonNull View itemView) {
+            super(itemView);
+
+            itemtext = itemView.findViewById(R.id.itemtext);
+        }
+    }
+}
+
 
