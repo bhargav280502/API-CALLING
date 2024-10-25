@@ -178,4 +178,7 @@ public class Useradpter extends RecyclerView.Adapter<Useradpter.userholder> {
     }
 }
 
-
+   removedItems.add(alluserlist.get(position)); // Add to removed list
+                alluserlist.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, alluserlist.size());
